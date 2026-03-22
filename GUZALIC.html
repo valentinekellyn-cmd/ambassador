@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Guzalic Luxurious Salon | Ambassador</title>
+
+<!-- Fonts matching the screenshots -->
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+<style>
+
+:root {
+
+--bg-dark: #0a0808;
+
+--accent-pink: #c96281;
+
+--text-gold: #d4af37;
+
+--card-bg: rgba(25, 20, 20, 0.6);
+
+--glass-bg: rgba(255, 255, 255, 0.05);
+
+--glass-border: rgba(255, 255, 255, 0.12);
+
+--glass-shadow: rgba(201, 98, 129, 0.15);
+
+}
+
+
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+
+background-color: var(--bg-dark);
+
+color: #ffffff;
+
+font-family: 'Inter', sans-serif;
+
+overflow-x: hidden;
+
+}
+
+
+
+/* 3D Liquid Layer */
+
+#liquid-bg {
+
+position: fixed;
+
+top: 0; left: 0;
+
+z-index: -1;
+
+opacity: 0.4;
+
+}
+
+
+
+.container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+
+
+/* Navigation - Glassmorphism */
+
+nav {
+
+display: flex;
+
+justify-content: space-between;
+
+align-items: center;
+
+padding: 20px 30px;
+
+margin-top: 15px;
+
+background: rgba(255, 255, 255, 0.04);
+
+backdrop-filter: blur(20px);
+
+-webkit-backdrop-filter: blur(20px);
+
+border: 1px solid var(--glass-border);
+
+border-radius: 20px;
+
+box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+
+}
+
+.logo { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--accent-pink); }
+
+.nav-links a { color: #aaa; text-decoration: none; margin-left: 30px; font-size: 0.9rem; transition: 0.3s; }
+
+.nav-links a:hover { color: var(--accent-pink); }
+
+.join-btn {
+
+background: linear-gradient(135deg, var(--accent-pink), #e07a9a);
+
+color: white;
+
+padding: 10px 25px;
+
+border-radius: 50px;
+
+text-decoration: none;
+
+font-weight: 600;
+
+box-shadow: 0 4px 15px rgba(201, 98, 129, 0.3);
+
+}
+
+
+
+/* Hero Section with Curved Back */
+
+.hero {
+
+position: relative;
+
+padding: 80px 0;
+
+min-height: 80vh;
+
+}
+
+.hero-curve {
+
+position: absolute;
+
+top: -100px; right: -10%;
+
+width: 70%; height: 120%;
+
+background: rgba(42, 26, 31, 0.5);
+
+backdrop-filter: blur(40px);
+
+-webkit-backdrop-filter: blur(40px);
+
+border-bottom-left-radius: 500px;
+
+border: 1px solid rgba(201, 98, 129, 0.08);
+
+z-index: -1;
+
+}
+
+.hero-content { max-width: 600px; }
+
+.ambassador-tag { color: var(--accent-pink); letter-spacing: 3px; font-size: 0.8rem; font-weight: 700; margin-bottom: 20px; display: block; }
+
+h1 { font-family: 'Playfair Display', serif; font-size: 4.5rem; line-height: 1.1; margin-bottom: 25px; }
+
+.hero-subtext { font-size: 1.1rem; color: #999; margin-bottom: 40px; line-height: 1.6; }
+
+.hero-subtext b { color: var(--accent-pink); }
+
+
+
+.cta-group { display: flex; gap: 20px; align-items: center; }
+
+.btn-primary {
+
+background: linear-gradient(135deg, var(--accent-pink), #e07a9a);
+
+color: white;
+
+padding: 18px 35px;
+
+border-radius: 12px;
+
+text-decoration: none;
+
+font-weight: 600;
+
+box-shadow: 0 8px 25px rgba(201, 98, 129, 0.3);
+
+transition: 0.3s;
+
+}
+
+.btn-primary:hover {
+
+box-shadow: 0 12px 35px rgba(201, 98, 129, 0.45);
+
+transform: translateY(-2px);
+
+}
+
+.btn-outline { color: #999; text-decoration: none; }
+
+
+
+/* Stats Section - Glassmorphism */
+
+.stats { display: flex; gap: 20px; margin-top: 60px; }
+
+.stat-item {
+
+background: rgba(255, 255, 255, 0.04);
+
+backdrop-filter: blur(16px);
+
+-webkit-backdrop-filter: blur(16px);
+
+border: 1px solid var(--glass-border);
+
+border-radius: 16px;
+
+padding: 20px 28px;
+
+box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+
+}
+
+.stat-item h3 { font-size: 1.5rem; color: var(--accent-pink); font-family: 'Playfair Display'; }
+
+.stat-item p { font-size: 0.7rem; color: #666; text-transform: uppercase; letter-spacing: 1px; }
+
+
+
+/* Main Profile Image - Glassmorphism frame */
+
+.main-profile-wrap { display: flex; justify-content: center; margin-top: -50px; padding-bottom: 100px; }
+
+.main-img-glass {
+
+position: relative;
+
+border-radius: 40px;
+
+padding: 8px;
+
+background: rgba(255, 255, 255, 0.06);
+
+backdrop-filter: blur(20px);
+
+-webkit-backdrop-filter: blur(20px);
+
+border: 1px solid var(--glass-border);
+
+box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), 0 0 80px rgba(201, 98, 129, 0.1);
+
+}
+
+.main-img { width: 100%; max-width: 600px; border-radius: 34px; display: block; object-fit: cover; }
+
+
+
+/* Service Cards Grid - Glassmorphism */
+
+.services-grid {
+
+display: grid;
+
+grid-template-columns: 1fr 1fr;
+
+gap: 40px;
+
+padding: 100px 0;
+
+}
+
+.service-box {
+
+background: rgba(255, 255, 255, 0.04);
+
+backdrop-filter: blur(20px);
+
+-webkit-backdrop-filter: blur(20px);
+
+padding: 40px;
+
+border-radius: 24px;
+
+border: 1px solid var(--glass-border);
+
+box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+
+transition: 0.3s;
+
+}
+
+.service-box:hover {
+
+transform: translateY(-5px);
+
+border-color: rgba(201, 98, 129, 0.4);
+
+box-shadow: 0 16px 48px rgba(0, 0, 0, 0.3), 0 0 40px rgba(201, 98, 129, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+
+}
+
+.icon-circle {
+
+width: 50px; height: 50px;
+
+background: rgba(201, 98, 129, 0.1);
+
+backdrop-filter: blur(10px);
+
+-webkit-backdrop-filter: blur(10px);
+
+border: 1px solid rgba(201, 98, 129, 0.2);
+
+border-radius: 12px; display: flex; align-items: center;
+
+justify-content: center; margin-bottom: 20px; font-size: 1.2rem;
+
+}
+
+.service-box h2 { font-family: 'Playfair Display', serif; margin-bottom: 20px; font-size: 1.8rem; }
+
+.service-list { list-style: none; }
+
+.service-list li { color: #888; margin-bottom: 10px; position: relative; padding-left: 20px; font-size: 0.95rem; }
+
+.service-list li::before { content: "\2022"; color: var(--accent-pink); position: absolute; left: 0; }
+
+
+
+/* Registration Form Section - Glassmorphism */
+
+.apply-section {
+
+padding: 100px 0;
+
+background: rgba(14, 10, 11, 0.6);
+
+backdrop-filter: blur(30px);
+
+-webkit-backdrop-filter: blur(30px);
+
+border-radius: 50px 50px 0 0;
+
+border-top: 1px solid var(--glass-border);
+
+}
+
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+
+.triple-gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
+
+.triple-gallery img {
+
+width: 100%;
+
+border-radius: 20px;
+
+border: 1px solid var(--glass-border);
+
+box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+
+object-fit: cover;
+
+aspect-ratio: 3/4;
+
+}
+
+
+
+.form-card {
+
+background: rgba(255, 255, 255, 0.04);
+
+backdrop-filter: blur(24px);
+
+-webkit-backdrop-filter: blur(24px);
+
+padding: 40px;
+
+border-radius: 30px;
+
+border: 1px solid var(--glass-border);
+
+box-shadow: 0 16px 48px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+
+}
+
+input {
+
+width: 100%; padding: 15px; margin-bottom: 20px;
+
+background: rgba(255, 255, 255, 0.04);
+
+backdrop-filter: blur(10px);
+
+-webkit-backdrop-filter: blur(10px);
+
+border: 1px solid rgba(255, 255, 255, 0.08);
+
+border-radius: 10px; color: white; outline: none;
+
+transition: 0.3s;
+
+}
+
+input:focus {
+
+border-color: var(--accent-pink);
+
+box-shadow: 0 0 20px rgba(201, 98, 129, 0.15);
+
+background: rgba(255, 255, 255, 0.06);
+
+}
+
+input::placeholder { color: #666; }
+
+
+
+.admin-trigger { text-align: center; opacity: 0.2; padding: 40px; cursor: pointer; }
+
+
+
+@media (max-width: 768px) {
+
+h1 { font-size: 2.8rem; }
+
+.services-grid { grid-template-columns: 1fr; }
+
+.form-grid { grid-template-columns: 1fr; }
+
+.stats { flex-wrap: wrap; gap: 12px; }
+
+nav { flex-direction: column; gap: 15px; }
+
+.nav-links a { margin-left: 15px; }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+
+
+<canvas id="liquid-bg"></canvas>
+
+
+
+<div class="container">
+
+<nav>
+
+<div class="logo">Guzalic</div>
+
+<div class="nav-links">
+
+<a href="#services">Services</a>
+
+<a href="#apply">Apply</a>
+
+<a href="#apply" class="join-btn">Join Now</a>
+
+</div>
+
+</nav>
+
+
+
+<section class="hero">
+
+<div class="hero-curve"></div>
+
+<div class="hero-content">
+
+<span class="ambassador-tag">AMBASSADOR PROGRAM</span>
+
+<h1>Guzalic Luxurious Salon</h1>
+
+<p class="hero-subtext">
+
+Represent the pinnacle of beauty and luxury. Join our ambassador family and enjoy <b>all services FREE</b> on your first visit.
+
+</p>
+
+<div class="cta-group">
+
+<a href="#apply" class="btn-primary">Become an Ambassador</a>
+
+<a href="#services" class="btn-outline">Our Services</a>
+
+</div>
+
+<div class="stats">
+
+<div class="stat-item"><h3>4.7&#9733;</h3><p>RATING</p></div>
+
+<div class="stat-item"><h3>150+</h3><p>REVIEWS</p></div>
+
+</div>
+
+</div>
+
+</section>
+
+
+
+<div class="main-profile-wrap">
+
+<div class="main-img-glass">
+
+<img src="IMG_4165.jpeg" class="main-img" alt="Luxury Beauty">
+
+</div>
+
+</div>
+
+
+
+<section class="services-grid" id="services">
+
+<!-- Hair Services -->
+
+<div class="service-box">
+
+<div class="icon-circle">&#9986;&#65039;</div>
+
+<h2>Hair Services</h2>
+
+<ul class="service-list">
+
+<li>Haircuts & Styling</li>
+
+<li>Keratin Treatment</li>
+
+<li>Balayage & Coloring</li>
+
+<li>Hair Botox</li>
+
+</ul>
+
+</div>
+
+<!-- Makeup -->
+
+<div class="service-box">
+
+<div class="icon-circle">&#10024;</div>
+
+<h2>Makeup</h2>
+
+<ul class="service-list">
+
+<li>Bridal HD/Airbrush</li>
+
+<li>Party Makeup</li>
+
+<li>Pre-bridal Packages</li>
+
+</ul>
+
+</div>
+
+<!-- Nail Art -->
+
+<div class="service-box">
+
+<div class="icon-circle">&#128133;</div>
+
+<h2>Nail Art</h2>
+
+<ul class="service-list">
+
+<li>Gel/Acrylic Extensions</li>
+
+<li>Custom Nail Art</li>
+
+<li>Gel Polish Manicure</li>
+
+</ul>
+
+</div>
+
+<!-- Skin -->
+
+<div class="service-box">
+
+<div class="icon-circle">&#127800;</div>
+
+<h2>Skin Treatments</h2>
+
+<ul class="service-list">
+
+<li>Hydrafacial</li>
+
+<li>Chemical Peels</li>
+
+<li>Pigmentation Treatments</li>
+
+</ul>
+
+</div>
+
+</section>
+
+
+
+<section class="apply-section" id="apply">
+
+<div class="container">
+
+<div class="form-grid">
+
+<div class="triple-gallery">
+
+<img src="img_4165.jpeg" alt="Beauty Styling">
+
+<img src="img_4167.jpeg" alt="Nail Art">
+
+<img src="img_4168.jpeg" alt="Nail Design">
+
+</div>
+
+<div class="form-card">
+
+<h2 style="margin-bottom: 20px; font-family: 'Playfair Display';">Ambassador Registration</h2>
+
+<form id="applyForm">
+
+<input type="text" placeholder="Full Name" required id="name">
+
+<input type="email" placeholder="Email Address" required id="email">
+
+<input type="tel" placeholder="Phone Number" required id="phone">
+
+<input type="text" placeholder="City" required id="city">
+
+<button type="submit" class="btn-primary" style="width: 100%; border: none; cursor: pointer; font-size: 1rem;">Submit Application</button>
+
+</form>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+
+<p class="admin-trigger" onclick="checkAdmin()">Admin Login</p>
+
+</div>
+
+
+
+<script>
+
+// 1. 3D Liquid Pink Animation
+
+const scene = new THREE.Scene();
+
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+
+const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('liquid-bg'), alpha: true });
+
+renderer.setSize(window.innerWidth, window.innerHeight);
+
+
+
+const geometry = new THREE.TorusKnotGeometry(10, 3, 100, 16);
+
+const material = new THREE.MeshPhongMaterial({ color: 0xc96281, wireframe: true });
+
+const knot = new THREE.Mesh(geometry, material);
+
+scene.add(knot);
+
+
+
+const light = new THREE.PointLight(0xffffff, 1, 100);
+
+light.position.set(10, 10, 10);
+
+scene.add(light);
+
+camera.position.z = 30;
+
+
+
+function animate() {
+
+requestAnimationFrame(animate);
+
+knot.rotation.x += 0.005;
+
+knot.rotation.y += 0.005;
+
+renderer.render(scene, camera);
+
+}
+
+animate();
+
+
+
+window.addEventListener('resize', () => {
+
+camera.aspect = window.innerWidth / window.innerHeight;
+
+camera.updateProjectionMatrix();
+
+renderer.setSize(window.innerWidth, window.innerHeight);
+
+});
+
+
+
+// 2. Form Logic
+
+document.getElementById('applyForm').addEventListener('submit', (e) => {
+
+e.preventDefault();
+
+const applicant = {
+
+name: document.getElementById('name').value,
+
+phone: document.getElementById('phone').value,
+
+city: document.getElementById('city').value,
+
+date: new Date().toLocaleDateString()
+
+};
+
+let apps = JSON.parse(localStorage.getItem('guzalic_applicants') || '[]');
+
+apps.push(applicant);
+
+localStorage.setItem('guzalic_applicants', JSON.stringify(apps));
+
+alert('Application received! Welcome to the family.');
+
+e.target.reset();
+
+});
+
+
+
+// 3. Admin Panel
+
+function checkAdmin() {
+
+const pw = prompt("Admin PIN:");
+
+if(pw === "2026") {
+
+const apps = JSON.parse(localStorage.getItem('guzalic_applicants') || '[]');
+
+alert("Current Applicants:\n" + apps.map(a => a.name + ' (' + a.city + ') - ' + a.phone).join("\n"));
+
+}
+
+}
+
+</script>
+
+</body>
+
+</html>
